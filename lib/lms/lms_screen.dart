@@ -5,129 +5,106 @@ class LmsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFDDF6D9),
-
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(18),
+            color: const Color(0xFF83C77B),
+            child: const Row(
+              children: [
+                Icon(Icons.school, color: Colors.white, size: 38),
+                SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Pembelajaran',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 21,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'SMK • Kelas • Semester',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: TextField(
+              decoration: const InputDecoration(
+                hintText: 'Cari mata pelajaran...',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-
-              const Text(
-                'Pembelajaran',
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
-              const Text(
-                'SMK Digital • XI RPL • Semester Ganjil',
-                style: TextStyle(
-                  color: Colors.black54,
-                ),
-              ),
-
-              const SizedBox(height: 25),
-
-              // Pencarian
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Cari mata pelajaran...',
-                  prefixIcon: const Icon(Icons.search),
-                  filled: true,
-                  fillColor: Colors.white,
-
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 25),
-
-              // Informasi jumlah
-              Row(
-                children: [
-
-                  Expanded(
-                    child: infoCard('Mata Pelajaran', '0'),
-                  ),
-
-                  const SizedBox(width: 10),
-
-                  Expanded(
-                    child: infoCard('Materi', '0'),
-                  ),
-
-                  const SizedBox(width: 10),
-
-                  Expanded(
-                    child: infoCard('Tugas', '0'),
-                  ),
-
-                ],
-              ),
-
-              const SizedBox(height: 30),
-
-              const Text(
-                'Daftar Mata Pelajaran',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              // Daftar mata pelajaran sengaja dikosongkan
-
+              _CountItem(value: '0', label: 'Mata Pelajaran'),
+              _CountItem(value: '0', label: 'Materi'),
+              _CountItem(value: '0', label: 'Tugas Aktif'),
             ],
           ),
-        ),
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              'Mata Pelajaran',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const Expanded(
+            child: Center(
+              child: Text('Belum ada mata pelajaran'),
+            ),
+          ),
+        ],
       ),
     );
   }
+}
 
-  // Kartu informasi
-  Widget infoCard(String judul, String jumlah) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 18,
-        horizontal: 8,
-      ),
+class _CountItem extends StatelessWidget {
+  final String value;
+  final String label;
 
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-      ),
+  const _CountItem({
+    required this.value,
+    required this.label,
+  });
 
-      child: Column(
-        children: [
-
-          Text(
-            jumlah,
-            style: const TextStyle(
-              fontSize: 23,
-              fontWeight: FontWeight.bold,
-            ),
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: const TextStyle(
+            color: Color(0xFF83C77B),
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
           ),
-
-          const SizedBox(height: 8),
-
-          Text(
-            judul,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 12),
+        ),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: 11,
           ),
-
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

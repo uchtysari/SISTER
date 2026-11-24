@@ -1,20 +1,15 @@
 class AuthService {
+  // Demo lokal: status login hanya bertahan selama aplikasi berjalan.
+  // Untuk login sungguhan, hubungkan ke backend/database sekolah.
+  static bool _loggedIn = false;
 
-  static bool sudahLogin = false;
+  static bool cekLogin() => _loggedIn;
 
-  // Fungsi Login
   static void login() {
-    sudahLogin = true;
+    _loggedIn = true;
   }
 
-  // Fungsi Logout
   static void logout() {
-    sudahLogin = false;
+    _loggedIn = false;
   }
-
-  // Mengecek status Login
-  static bool cekLogin() {
-    return sudahLogin;
-  }
-
 }

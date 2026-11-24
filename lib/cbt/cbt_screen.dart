@@ -5,42 +5,48 @@ class CbtScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFDDF6D9),
-
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-
-            const Icon(
-              Icons.assignment,
-              size: 90,
-              color: Color(0xFF62A85B),
-            ),
-
-            const SizedBox(height: 20),
-
-            const Text(
+    return SafeArea(
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(18),
+            color: const Color(0xFF83C77B),
+            child: const Text(
               'CBT',
+              textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 28,
+                color: Colors.white,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-
-            const SizedBox(height: 10),
-
-            const Text(
-              'Segera Hadir',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey,
-              ),
+          ),
+          const Spacer(),
+          Image.asset(
+            'assets/images/aset2.jpg',
+            width: 220,
+            height: 220,
+            fit: BoxFit.contain,
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'CBT Segera Hadir!',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
             ),
-
-          ],
-        ),
+          ),
+          const Padding(
+            padding: EdgeInsets.all(20),
+            child: Text(
+              'Fitur CBT sedang kami siapkan. Tunggu sebentar ya!',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey),
+            ),
+          ),
+          const Spacer(),
+        ],
       ),
     );
   }

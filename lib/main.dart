@@ -2,22 +2,25 @@ import 'package:flutter/material.dart';
 import 'splash/splash_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const SisterApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class SisterApp extends StatelessWidget {
+  const SisterApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    const green = Color(0xFF83C77B);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Absensi Siswa',
-
+      title: 'SISTER',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        useMaterial3: true,
+        scaffoldBackgroundColor: const Color(0xFFF8FAF8),
+        colorScheme: ColorScheme.fromSeed(seedColor: green),
+        fontFamily: 'Roboto',
       ),
-
       home: const SplashScreen(),
     );
   }

@@ -1,221 +1,149 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
-class PresensiScreen extends StatelessWidget {
+class PresensiScreen extends StatefulWidget {
   const PresensiScreen({super.key});
 
-  Future<void> ambilFoto(BuildContext context) async {
-    final ImagePicker picker = ImagePicker();
-
-    final XFile? foto = await picker.pickImage(
-      source: ImageSource.camera,
-    );
-
-    if (foto == null || !context.mounted) return;
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PreviewPresensiScreen(
-          imagePath: foto.path,
-          onRetake: () => ambilFoto(context),
-        ),
-      ),
-    );
-  }
-
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFDDF6D9),
-
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(25),
-
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-
-              const Icon(
-                Icons.camera_alt,
-                size: 100,
-                color: Color(0xFF62A85B),
-              ),
-
-              const SizedBox(height: 25),
-
-              const Text(
-                'Presensi Wajah',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              const Text(
-                'Silakan lakukan presensi dengan wajah Anda.',
-                textAlign: TextAlign.center,
-              ),
-
-              const SizedBox(height: 30),
-
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-
-                child: ElevatedButton(
-                  onPressed: () => ambilFoto(context),
-
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF8BCB7F),
-                    foregroundColor: Colors.white,
-                  ),
-
-                  child: const Text(
-                    'Mulai Presensi',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-              ),
-
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  State<PresensiScreen> createState() => _PresensiScreenState();
 }
 
-// HALAMAN PREVIEW FOTO
-class PreviewPresensiScreen extends StatelessWidget {
-  final String imagePath;
-  final VoidCallback onRetake;
+class _PresensiScreenState extends State<PresensiScreen> {
+  bool adaFoto = false;
+  bool sudahPresensi = false;
+  bool izinKamera = false;
+  bool izinLokasi = false;
 
-  const PreviewPresensiScreen({
-    super.key,
-    required this.imagePath,
-    required this.onRetake,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFDDF6D9),
-
-      appBar: AppBar(
-        title: const Text('Pratinjau Foto'),
-        backgroundColor: const Color(0xFFDDF6D9),
-      ),
-
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-
-        child: Column(
-          children: [
-
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.file(
-                  File(imagePath),
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            Row(
-              children: [
-
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      onRetake();
-                    },
-                    child: const Text('Ambil Ulang'),
-                  ),
-                ),
-
-                const SizedBox(width: 10),
-
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const PresensiBerhasilScreen(),
-                        ),
-                      );
-                    },
-                    child: const Text('Gunakan'),
-                  ),
-                ),
-
-              ],
-            ),
-
-          ],
-        ),
-      ),
-    );
+  void ambilFoto() {
+    setState(() {
+      izinKamera = true;
+      adaFoto = true;
+    });
   }
-}
 
-// HALAMAN ABSENSI BERHASIL
-class PresensiBerhasilScreen extends StatelessWidget {
-  const PresensiBerhasilScreen({super.key});
+  void presensi() {
+    if (!adaFoto) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Ambil foto dulu!')),
+      );
+      return;
+    }
+
+    setState(() {
+      izinLokasi = true;
+      sudahPresensi = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFDDF6D9),
-
-      body: Center(
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(18),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
-            const Icon(
-              Icons.check_circle,
-              size: 100,
-              color: Color(0xFF62A85B),
-            ),
-
-            const SizedBox(height: 20),
-
             const Text(
-              'Absensi Berhasil!',
+              'Presensi Wajah',
               style: TextStyle(
-                fontSize: 25,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 25),
 
-            const Text('Presensi kamu berhasil dilakukan.'),
-
-            const SizedBox(height: 30),
-
-            ElevatedButton(
-              onPressed: () {
-                Navigator.popUntil(
-                  context,
-                  (route) => route.isFirst,
-                );
-              },
-              child: const Text('Kembali ke Home'),
+            Icon(
+              adaFoto ? Icons.person : Icons.face,
+              size: 130,
+              color: Colors.green,
             ),
 
+            const SizedBox(height: 10),
+
+            Text(
+              adaFoto ? 'Foto berhasil diambil' : 'Belum ada foto',
+            ),
+
+            const SizedBox(height: 18),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: sudahPresensi ? null : ambilFoto,
+                child: const Text('Ambil Foto'),
+              ),
+            ),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: sudahPresensi ? null : presensi,
+                child: const Text('Gunakan Foto'),
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Izin Akses',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.camera_alt, color: Colors.green),
+              title: const Text('Permission Kamera'),
+              subtitle: Text(izinKamera ? 'Diizinkan (Simulasi)' : 'Belum diizinkan'),
+            ),
+
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.location_on, color: Colors.green),
+              title: const Text('Permission Lokasi'),
+              subtitle: Text(izinLokasi ? 'Diizinkan (Simulasi)' : 'Belum diizinkan'),
+            ),
+
+            const Divider(),
+
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Lokasi Presensi',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+
+            const ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Icon(Icons.map, color: Colors.green),
+              title: Text('Lokasi Sekolah'),
+              subtitle: Text('Lokasi terdeteksi (Simulasi)'),
+            ),
+
+            const SizedBox(height: 15),
+
+            if (sudahPresensi)
+              const Column(
+                children: [
+                  Text(
+                    'Presensi Berhasil',
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text('Keterangan: Tepat Waktu'),
+                ],
+              ),
           ],
         ),
       ),
